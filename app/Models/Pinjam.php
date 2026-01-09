@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use App\Models\Mobil;
+use App\Models\Peminjam;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -12,6 +14,45 @@ class Pinjam extends Model
     use HasFactory;
     protected $table = 'pinjam';
     protected $guarded = [];
+
+        protected static function booted()
+    {
+        static::created(function ($record) {
+            self::syncStatusMobil($record);
+        });
+
+        static::updated(function ($record) {
+            self::syncStatusMobil($record);
+        });
+    }
+
+    private static function syncStatusMobil($record): void
+    {
+        // hanya jika tanggal_mulai adalah hari ini
+        if (! Carbon::parse($record->tanggal_mulai)->isToday()) {
+            return;
+        }
+
+        $mobil = $record->mobil;
+        if (! $mobil) {
+            return;
+        }
+
+        $statusMobil = match ($record->status_sewa) {
+            'dipesan'   => 'dipesan',
+            'berjalan'  => 'dipinjam',
+            'kembali',
+            'dibatalkan' => 'tersedia',
+            default     => $mobil->status,
+        };
+
+        // hindari update berulang
+        if ($mobil->status !== $statusMobil) {
+            $mobil->update([
+                'status' => $statusMobil,
+            ]);
+        }
+    }
 
     public function mobil()
     {

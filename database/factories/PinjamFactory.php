@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Peminjam;
 use App\Models\Mobil;
+use App\Models\Peminjam;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PinjamFactory extends Factory

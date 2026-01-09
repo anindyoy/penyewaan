@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Mobil;
+use App\Models\Pinjam;
 use Illuminate\Console\Command;
 
 class CekQueryCommand extends Command
@@ -26,8 +27,26 @@ class CekQueryCommand extends Command
      */
     public function handle()
     {
+        // $mobil = Mobil::whereModel('Ertiga')->first();
+        // $latest = Pinjam::where('mobil_id', $mobil->id)
+        //     ->where('tanggal')
+        //     ->latest()->first();
+
+        // if ($isLatest) {
+        //     $statusMobil = 'tersedia'; // Default
+
+        //     if ($statusSewa === 'berjalan') {
+        //         $statusMobil = 'dipinjam';
+        //     } elseif ($statusSewa === 'dipesan') {
+        //         $statusMobil = 'dipesan';
+        //     }
+
+        //     $mobil->update([
+        //         'status' => $statusMobil
+        //     ]);
+        // }
         dd(
-            fake()->randomElements(['Ketua', 'Karyawan', 'Supir', 'Pemateri'])[0]
+            // Pinjam::factory()->create([''])
         );
     }
 }

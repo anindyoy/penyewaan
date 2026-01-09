@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
-use Carbon\Carbon;
-use App\Models\Mobil;
-use App\Models\Pinjam;
-use App\Models\Peminjam;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Mobil;
+use App\Models\Peminjam;
+use App\Models\Pinjam;
+use Carbon\Carbon;
 
 class PinjamSeeder extends Seeder
 {
@@ -37,31 +36,55 @@ class PinjamSeeder extends Seeder
                 ->orderBy('tanggal_selesai_rencana', 'desc')
                 ->first();
 
-            // Jika pernah dipinjam, mulai sewa berikutnya 1 hari setelah selesai sebelumnya
-            // Jika belum pernah, mulai dari hari ini
+            // Logika penentuan tanggal mulai
             $mulai = $lastBooking
                 ? Carbon::parse($lastBooking->tanggal_selesai_rencana)->addDays(1)
                 : Carbon::now()->addDays(rand(-10, 0));
 
             $tipeSewa = collect(['jam', 'hari'])->random();
 
-            // Tentukan durasi: jika jam (2-12 jam), jika hari (1-5 hari)
+            // Tentukan durasi
             $selesai = $tipeSewa === 'jam'
                 ? (clone $mulai)->addHours(rand(2, 12))
                 : (clone $mulai)->addDays(rand(1, 5));
 
-            Pinjam::create([
+            // Logika status pinjam
+            $statusSewa = $mulai->isFuture()
+                ? 'dipesan'
+                : (($mulai->isPast() && $selesai->isFuture()) ? 'berjalan' : 'kembali');
+
+            $pinjam = Pinjam::create([
                 'peminjam_id' => $peminjam->id,
                 'mobil_id' => $mobil->id,
                 'tipe_sewa' => $tipeSewa,
                 'tanggal_mulai' => $mulai,
                 'tanggal_selesai_rencana' => $selesai,
-                'tanggal_kembali_aktual' => $mulai->isPast() ? (clone $selesai)->addHours(rand(0, 5)) : null,
+                'tanggal_kembali_aktual' => $mulai->isPast() && $statusSewa === 'kembali' ? (clone $selesai)->addHours(rand(0, 5)) : null,
                 'km_awal' => rand(10000, 20000),
-                'km_akhir' => $mulai->isPast() ? rand(20100, 21000) : null,
-                'status_sewa' => $mulai->isFuture() ? 'dipesan' : ($mulai->isPast() && $selesai->isFuture() ? 'berjalan' : 'kembali'),
+                'km_akhir' => $mulai->isPast() && $statusSewa === 'kembali' ? rand(20100, 21000) : null,
+                'status_sewa' => $statusSewa,
                 'catatan_kondisi' => 'Kondisi fisik mulus hasil seeder.',
             ]);
+
+            // 3. UPDATE STATUS MOBIL berdasarkan peminjaman terakhir (Hanya jika ini data terbaru)
+            // Cek apakah data yang baru dibuat adalah jadwal yang paling terakhir untuk mobil ini
+            $isLatest = !Pinjam::where('mobil_id', $mobil->id)
+                ->where('tanggal_mulai', '>', $pinjam->tanggal_mulai)
+                ->exists();
+
+            if ($isLatest) {
+                $statusMobil = 'tersedia'; // Default
+
+                if ($statusSewa === 'berjalan') {
+                    $statusMobil = 'dipinjam';
+                } elseif ($statusSewa === 'dipesan') {
+                    $statusMobil = 'dipesan';
+                }
+
+                $mobil->update([
+                    'status' => $statusMobil
+                ]);
+            }
         }
     }
 }
