@@ -17,6 +17,8 @@ use App\Filament\Resources\Pinjams\Tables\PinjamsTable;
 class PinjamResource extends Resource
 {
     protected static ?string $model = Pinjam::class;
+    protected static ?string $modelLabel = 'Peminjaman';
+
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

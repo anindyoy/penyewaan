@@ -23,12 +23,27 @@ class PinjamForm
                             ->searchable()
                             ->preload()
                             ->required(),
+
                         Select::make('mobil_id')
                             ->label('Mobil')
-                            ->options(Mobil::where('status', 'tersedia')->pluck('model', 'id'))
-                            // ->description('Hanya menampilkan mobil yang berstatus tersedia')
+                            ->relationship(
+                                name: 'mobil',
+                                titleAttribute: 'model',
+                                modifyQueryUsing: function ($query, $get, $record) {
+                                    $query->where('status', 'tersedia');
+                                    if ($record?->mobil_id) {
+                                        $query->orWhere('id', $record->mobil_id);
+                                    }
+                                }
+                            )
+                            ->getOptionLabelFromRecordUsing(
+                                fn($record) => "{$record->model} {$record->warna} ({$record->nomor_plat})"
+                            )
+                            ->searchable()->preload()
+                            ->helperText('Mobil tersedia')
                             ->searchable()
                             ->required(),
+
                         Select::make('tipe_sewa')
                             ->options([
                                 'jam' => 'Per Jam',
@@ -50,10 +65,8 @@ class PinjamForm
 
                 Section::make('Waktu & Durasi')
                     ->schema([
-                        DateTimePicker::make('tanggal_mulai')
-                            ->required(),
-                        DateTimePicker::make('tanggal_selesai_rencana')
-                            ->required(),
+                        DateTimePicker::make('tanggal_mulai')->required()->default(now()),
+                        DateTimePicker::make('tanggal_selesai_rencana')->required(),
                         DateTimePicker::make('tanggal_kembali_aktual'),
                     ])->columns(3),
 
