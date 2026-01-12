@@ -21,6 +21,7 @@ class PinjamsTable
             ->columns([
                 TextColumn::make('peminjam.nama')
                     ->label('Nama Peminjam')
+                    ->description(fn(Pinjam $record): string => $record->peminjam?->organisasi . ' - ' . $record->peminjam?->jabatan)
                     ->searchable(),
                 TextColumn::make('mobil.model')
                     ->label('Mobil')
@@ -35,10 +36,31 @@ class PinjamsTable
                     ])
                     ->formatStateUsing(fn($state) => ucfirst($state)),
                 TextColumn::make('tanggal_mulai')
-                    ->dateTime('d M Y H:i')
+                    ->formatStateUsing(function ($state) {
+                        if (blank($state)) {
+                            return null;
+                        }
+
+                        $date = Carbon::parse($state);
+
+                        return $date->year === now()->year
+                            ? $date->format('d M, H:i')
+                            : $date->format('d M Y, H:i');
+                    })
+                    ->description(function (Pinjam $record): ?string {
+                        if (blank($record->tanggal_selesai_rencana)) {
+                            return null;
+                        }
+
+                        $date = $record->tanggal_selesai_rencana;
+
+                        return 'Rencana Kembali: ' .
+                            ($date->year === now()->year
+                                ? $date->format('d M, H:i')
+                                : $date->format('d M Y, H:i'));
+                    })
                     ->sortable(),
-                TextColumn::make('tanggal_selesai_rencana')
-                    ->dateTime('d M Y H:i'),
+                TextColumn::make('user.name'),
             ])
             ->filters([
                 SelectFilter::make('status_sewa'),

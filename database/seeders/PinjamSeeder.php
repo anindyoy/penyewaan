@@ -2,11 +2,12 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Mobil;
-use App\Models\Peminjam;
-use App\Models\Pinjam;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Mobil;
+use App\Models\Pinjam;
+use App\Models\Peminjam;
+use Illuminate\Database\Seeder;
 
 class PinjamSeeder extends Seeder
 {
@@ -56,6 +57,7 @@ class PinjamSeeder extends Seeder
             $pinjam = Pinjam::create([
                 'peminjam_id' => $peminjam->id,
                 'mobil_id' => $mobil->id,
+                'user_id' => User::inRandomOrder()->first()->id,
                 'tipe_sewa' => $tipeSewa,
                 'tanggal_mulai' => $mulai,
                 'tanggal_selesai_rencana' => $selesai,

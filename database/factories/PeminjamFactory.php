@@ -17,7 +17,7 @@ class PeminjamFactory extends Factory
     public function definition(): array
     {
         return [
-            'nama' => $this->faker->name(),
+            'nama' => $this->faker->firstName(),
             'organisasi' => $this->faker->company(),
             'jabatan' => $this->faker->randomElements(['Ketua', 'Karyawan', 'Supir', 'Pemateri'])[0],
             'hp' => $this->faker->phoneNumber(),

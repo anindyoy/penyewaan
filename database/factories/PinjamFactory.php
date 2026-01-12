@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use App\Models\Mobil;
 use App\Models\Peminjam;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -15,8 +16,9 @@ class PinjamFactory extends Factory
         $selesai = (clone $mulai)->modify('+' . rand(2, 72) . ' hours');
 
         return [
-            'peminjam_id' => Peminjam::inRandomOrder()->first() ?? Peminjam::factory(), // Otomatis buat peminjam baru
-            'mobil_id' => Mobil::inRandomOrder()->first() ?? Mobil::factory(),       // Otomatis buat mobil baru
+            'peminjam_id' => Peminjam::inRandomOrder()->first() ?? Peminjam::factory(),
+            'mobil_id' => Mobil::inRandomOrder()->first() ?? Mobil::factory(),
+            'user_id' => User::inRandomOrder()->first()->id,
             'tipe_sewa' => $this->faker->randomElement(['jam', 'hari']),
             'tanggal_mulai' => $mulai,
             'tanggal_selesai_rencana' => $selesai,

@@ -29,6 +29,11 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+        if (!User::count() < 2) {
+            $this->command->info('Creating 3 user');
+            User::factory(3)->create();
+        }
+
         if (!Mobil::count()) {
             $this->command->info('Creating 10 mobil');
             \App\Models\Mobil::factory(10)->create(['status' => 'tersedia']);

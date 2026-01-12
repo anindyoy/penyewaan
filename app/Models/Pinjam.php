@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Mobil;
 use App\Models\Peminjam;
 use Illuminate\Database\Eloquent\Model;
@@ -15,7 +16,12 @@ class Pinjam extends Model
     protected $table = 'pinjam';
     protected $guarded = [];
 
-        protected static function booted()
+    protected $casts = [
+        'tanggal_mulai' => 'datetime',
+        'tanggal_selesai_rencana' => 'datetime',
+    ];
+
+    protected static function booted()
     {
         static::created(function ($record) {
             self::syncStatusMobil($record);
@@ -62,5 +68,10 @@ class Pinjam extends Model
     public function peminjam()
     {
         return $this->belongsTo(Peminjam::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

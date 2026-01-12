@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('peminjam_id')->constrained('peminjam')->onDelete('cascade');
             $table->foreignId('mobil_id')->constrained('mobil')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
 
             // Tipe sewa untuk menentukan perhitungan harga
             $table->enum('tipe_sewa', ['jam', 'hari']);
