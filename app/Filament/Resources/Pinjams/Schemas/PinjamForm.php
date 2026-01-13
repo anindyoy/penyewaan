@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Pinjams\Schemas;
 
-use App\Models\Mobil;
 use Filament\Schemas\Schema;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -44,23 +44,23 @@ class PinjamForm
                             ->searchable()
                             ->required(),
 
-                        Select::make('tipe_sewa')
+                        Radio::make('tipe_sewa')
                             ->options([
                                 'jam' => 'Per Jam',
                                 'hari' => 'Per Hari',
                             ])
-                            ->required()
-                            ->native(false),
+                            ->required(),
                         Select::make('status_sewa')
                             ->options([
-                                'dipesan' => 'Dipesan',
-                                'berjalan' => 'Berjalan',
+                                'dipinjam' => 'Dipinjam',
                                 'kembali' => 'Kembali',
                                 'terlambat' => 'Terlambat',
                                 'dibatalkan' => 'Dibatalkan',
                             ])
-                            ->default('dipesan')
+                            ->default('dipinjam')
                             ->required(),
+
+                        TextInput::make('tujuan')->maxLength(150)->columnSpanFull(),
                     ])->columns(2),
 
                 Section::make('Waktu & Durasi')

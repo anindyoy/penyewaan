@@ -37,7 +37,7 @@ class MobilForm
                         'tersedia' => 'Tersedia',
                         'dipinjam' => 'Dipinjam',
                         'perbaikan' => 'Dalam Perbaikan',
-                        'dipesan' => 'Dipesan',
+                        'dipinjam' => 'Dipinjam',
                     ])
                     ->default('tersedia')
                     ->required(),

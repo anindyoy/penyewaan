@@ -51,8 +51,8 @@ class PinjamSeeder extends Seeder
 
             // Logika status pinjam
             $statusSewa = $mulai->isFuture()
-                ? 'dipesan'
-                : (($mulai->isPast() && $selesai->isFuture()) ? 'berjalan' : 'kembali');
+                ? 'dipinjam'
+                : (($mulai->isPast() && $selesai->isFuture()) ? 'dipinjam' : 'kembali');
 
             $pinjam = Pinjam::create([
                 'peminjam_id' => $peminjam->id,
@@ -65,6 +65,7 @@ class PinjamSeeder extends Seeder
                 'km_awal' => rand(10000, 20000),
                 'km_akhir' => $mulai->isPast() && $statusSewa === 'kembali' ? rand(20100, 21000) : null,
                 'status_sewa' => $statusSewa,
+                'tujuan' => $this->faker->optional()->sentence(),
                 'catatan_kondisi' => 'Kondisi fisik mulus hasil seeder.',
             ]);
 
@@ -77,10 +78,8 @@ class PinjamSeeder extends Seeder
             if ($isLatest) {
                 $statusMobil = 'tersedia'; // Default
 
-                if ($statusSewa === 'berjalan') {
+                if ($statusSewa === 'dipinjam') {
                     $statusMobil = 'dipinjam';
-                } elseif ($statusSewa === 'dipesan') {
-                    $statusMobil = 'dipesan';
                 }
 
                 $mobil->update([

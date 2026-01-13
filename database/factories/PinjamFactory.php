@@ -27,7 +27,7 @@ class PinjamFactory extends Factory
             'km_akhir' => function (array $attributes) {
                 return $attributes['km_awal'] + $this->faker->numberBetween(10, 500);
             },
-            'status_sewa' => $this->faker->randomElement(['dipesan', 'berjalan', 'kembali', 'terlambat', 'dibatalkan']),
+            'status_sewa' => $this->faker->randomElement(['dipinjam', 'kembali', 'terlambat', 'dibatalkan']),
             'catatan_kondisi' => $this->faker->sentence(),
         ];
     }

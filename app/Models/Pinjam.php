@@ -23,6 +23,11 @@ class Pinjam extends Model
 
     protected static function booted()
     {
+        static::creating(function ($record) {
+            if (!$record->user_id)
+                $record->user_id = auth()->user()->id;
+        });
+
         static::created(function ($record) {
             self::syncStatusMobil($record);
         });
@@ -45,8 +50,7 @@ class Pinjam extends Model
         }
 
         $statusMobil = match ($record->status_sewa) {
-            'dipesan'   => 'dipesan',
-            'berjalan'  => 'dipinjam',
+            'dipinjam'   => 'dipinjam',
             'kembali',
             'dibatalkan' => 'tersedia',
             default     => $mobil->status,

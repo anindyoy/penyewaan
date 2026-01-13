@@ -28,7 +28,8 @@ return new class extends Migration
             $table->integer('km_awal')->nullable();
             $table->integer('km_akhir')->nullable();
 
-            $table->enum('status_sewa', ['dipesan', 'berjalan', 'kembali', 'terlambat', 'dibatalkan'])->default('dipesan');
+            $table->enum('status_sewa', ['dipinjam', 'kembali', 'terlambat', 'dibatalkan'])->default('dipinjam');
+            $table->string('tujuan', 150)->nullable();
             $table->text('catatan_kondisi')->nullable(); // Contoh: lecet di pintu kanan
             $table->timestamps();
         });

@@ -37,8 +37,8 @@ class CekQueryCommand extends Command
 
         //     if ($statusSewa === 'berjalan') {
         //         $statusMobil = 'dipinjam';
-        //     } elseif ($statusSewa === 'dipesan') {
-        //         $statusMobil = 'dipesan';
+        //     } elseif ($statusSewa === 'dipinjam') {
+        //         $statusMobil = 'dipinjam';
         //     }
 
         //     $mobil->update([

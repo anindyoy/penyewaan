@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('nomor_plat')->unique();
             $table->string('warna');
             $table->year('tahun_produksi');
-            $table->enum('status', ['tersedia', 'dipinjam', 'perbaikan', 'dipesan'])->default('tersedia');
+            $table->enum('status', ['tersedia', 'dipinjam', 'perbaikan', 'dipinjam'])->default('tersedia');
             $table->timestamps();
         });
     }

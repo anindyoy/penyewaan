@@ -23,7 +23,7 @@ class MobilsTable
                 BadgeColumn::make('status')
                     ->colors([
                         'success' => 'tersedia',
-                        'warning' => 'dipesan',
+                        'warning' => 'dipinjam',
                         'danger' => 'perbaikan',
                         'primary' => 'dipinjam',
                     ])

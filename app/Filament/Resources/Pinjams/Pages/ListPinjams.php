@@ -17,11 +17,11 @@ class ListPinjams extends ListRecords
         return [
             CreateAction::make()
                 ->after(function ($record) {
-                    // Logika: Jika tanggal mulai adalah hari ini DAN statusnya berjalan
+                    // Logika: Jika tanggal mulai adalah hari ini DAN statusnya dipinjam
                     $hariIni = Carbon::now()->isSameDay($record->tanggal_mulai);
 
-                    if ($hariIni && $record->status_sewa === 'berjalan') {
-                        $status = 
+                    if ($hariIni && $record->status_sewa === 'dipinjam') {
+                        $status =
                         // Update status mobil menjadi dipinjam
                         Mobil::where('id', $record->mobil_id)->update([
                             'status' => 'dipinjam'
