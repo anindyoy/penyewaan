@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('mobil', function (Blueprint $table) {
             $table->id();
-            $table->string('merek');            // Toyota, Honda
-            $table->string('model');            // Avanza, Civic
+            $table->string('merek');
+            $table->string('model');
             $table->string('nomor_plat')->unique();
             $table->string('warna');
             $table->year('tahun_produksi');
-            $table->enum('status', ['tersedia', 'dipinjam', 'perbaikan', 'dipinjam'])->default('tersedia');
+            $table->enum('status', ['tersedia', 'dipinjam', 'perbaikan'])->default('tersedia');
             $table->timestamps();
         });
     }

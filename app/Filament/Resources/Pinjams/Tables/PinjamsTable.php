@@ -29,8 +29,9 @@ class PinjamsTable
                     )
                     ->searchable(),
 
-                TextColumn::make('mobil.model')
+                TextColumn::make('mobil')
                     ->label('Mobil')
+                    ->formatStateUsing(fn($state) => $state->model . ' ' . ucfirst($state->warna))
                     ->description(fn(Pinjam $record): string => $record->mobil->nomor_plat),
 
                 BadgeColumn::make('status_sewa')

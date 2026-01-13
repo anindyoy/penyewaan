@@ -65,7 +65,7 @@ class PinjamSeeder extends Seeder
                 'km_awal' => rand(10000, 20000),
                 'km_akhir' => $mulai->isPast() && $statusSewa === 'kembali' ? rand(20100, 21000) : null,
                 'status_sewa' => $statusSewa,
-                'tujuan' => $this->faker->optional()->sentence(),
+                'tujuan' => fake()->optional()->sentence(),
                 'catatan_kondisi' => 'Kondisi fisik mulus hasil seeder.',
             ]);
 
